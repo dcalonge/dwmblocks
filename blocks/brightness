@@ -1,0 +1,21 @@
+#!/bin/sh
+
+max_brightness=$(brightnessctl max)
+
+if [ "$max_brightness" -gt 0 ]; then
+  brightness_percent=$(($(brightnessctl get) * 100 / max_brightness))
+else
+  brightness_percent=0
+fi
+
+if [ "$brightness_percent" -le 24 ]; then
+  icon="󰃞"
+elif [ "$brightness_percent" -le 49 ]; then
+  icon="󰃝"
+elif [ "$brightness_percent" -le 74 ]; then
+  icon="󰃟"
+else
+  icon="󰃠"
+fi
+
+echo -n "$icon $brightness_percent%" && notify-send " 󰃟" -t 1000 -u low -h int:value:$brightness_percent -c "osd" --hint=string:x-dunst-stack-tag:osd

@@ -1,0 +1,27 @@
+#!/bin/sh
+
+strength=$(awk '/wlo1/ { print int(($3) * 100 / 70) }' /proc/net/wireless)
+
+if [ -n "$strength" ]; then
+  if [ "$strength" -le 25 ]; then
+    icon="󰤟"
+  elif [ "$strength" -le 50 ]; then
+    icon="󰤢"
+  elif [ "$strength" -le 75 ]; then
+    icon="󰤥"
+  else
+    icon="󰤨"
+  fi
+else
+  icon="󰤮"
+fi
+
+ssid=$(iwgetid -r)
+
+if [ -z "$ssid" ]; then
+  ssid="  no internet"
+else
+  ssid="  $ssid"
+fi
+
+echo -n "$icon$ssid"
